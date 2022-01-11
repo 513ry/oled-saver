@@ -1,8 +1,17 @@
 module OLED_SAVER
-  MIN = 5
+  private
+  def self.user_time
+    time = ARGV[0].to_i
+    time = nil if time == 0
+    time
+  end
+
+  MIN = self.user_time || 5
   SEC = MIN * 60
   @dimmed = false
-
+  puts "I will check on your mouse status each #{MIN} mints"
+  
+  public
   def self.run
     xp = yp = 0
 
