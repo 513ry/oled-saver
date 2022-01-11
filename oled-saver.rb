@@ -13,6 +13,7 @@ module OLED_SAVER
   
   public
   def self.run
+    trap('INT') do puts ''; exit 0 end
     xp = yp = 0
 
     while true do
