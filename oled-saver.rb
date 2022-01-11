@@ -13,11 +13,11 @@ module OLED_SAVER
   def self.user_screen
     screen = false
     if ARGV[argc] == '-s' and ARGV.size >= 2
+      argc 2  
       tmp_screen = ARGV[1]
       if `xrandr | grep -o '#{tmp_screen} connected'`.empty?
         warn "Specified screen is not connected (running defaults)"
       else
-        argc 2
         screen = tmp_screen
       end
     end
