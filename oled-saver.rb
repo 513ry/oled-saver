@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 module OLED_SAVER
   private
   @argc = 0
