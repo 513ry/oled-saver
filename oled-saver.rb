@@ -15,7 +15,7 @@ module OLED_SAVER
     if ARGV[argc] == '-s'
       argc 1
       while ARGV.size >= argc + 1
-        p argc, tmp_screen = ARGV[argc]
+        tmp_screen = ARGV[argc]
         if `xrandr | grep -o '#{tmp_screen} connected'`.empty?
           break
         else
@@ -34,7 +34,6 @@ module OLED_SAVER
   end
 
   SCREEN = (self.user_screen || 'DP-4').split
-  p argc
   MIN = self.user_time || 5
   SEC = MIN * 60
   @dimmed = false
