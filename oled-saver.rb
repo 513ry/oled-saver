@@ -12,15 +12,18 @@ module OLED_SAVER
   # [-s screen] [mints]
   def self.user_screen
     screen = false
-    if ARGV[argc] == '-s' and ARGV.size >= 2
-      argc 2  
-      tmp_screen = ARGV[1]
-      if `xrandr | grep -o '#{tmp_screen} connected'`.empty?
-        warn "Specified screen is not connected (running defaults)"
-      else
-        screen = tmp_screen
+    if ARGV[argc] == '-s'
+      argc 1
+      while ARGV.size >= argc + 1
+        p argc, tmp_screen = ARGV[argc]
+        if `xrandr | grep -o '#{tmp_screen} connected'`.empty?
+          break
+        else
+          screen ? screen = "#{screen} #{tmp_screen}" : screen = tmp_screen
+        end
+        argc argc + 1
       end
-    end
+    end 
     screen
   end
 
@@ -30,7 +33,8 @@ module OLED_SAVER
     time
   end
 
-  SCREEN = self.user_screen || 'DP-4'
+  SCREEN = (self.user_screen || 'DP-4').split
+  p argc
   MIN = self.user_time || 5
   SEC = MIN * 60
   @dimmed = false
@@ -45,10 +49,16 @@ module OLED_SAVER
     while true do
       x, y = `xdotool getmouselocation --shell`[/X=(\d+)\nY=(\d+)/].lines.map do |v| v[/.=(\d+)/, 1].to_i end
       if xp == x and yp == y
-        (`xrandr --output #{SCREEN} --brightness 0.0`
-         @dimmed = true) if @dimmed == false
+        if @dimmed == false
+          SCREEN.size.times.with_index do |index|
+            `xrandr --output #{SCREEN[index]} --brightness 0.0`
+          end
+          @dimmed = true 
+        end
       else
-        (@dimmed = false; `xrandr --output #{SCREEN} --brightness 1.0`) if @dimmed == true
+        SCREEN.size.times.with_index do |index|
+          @dimmed = false; `xrandr --output #{SCREEN[index]} --brightness 1.0`
+        end if @dimmed == true
         xp, yp = x, y
         sleep SEC
       end
