@@ -1,5 +1,6 @@
 *
 ~/*
 !.gitignore
+!Makefile
 !README.md
 ![a-z]*.rb
