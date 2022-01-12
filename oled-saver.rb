@@ -26,7 +26,7 @@ module OLED_SAVER
 
   def self.user_time
     time = ARGV[argc].to_f
-    time = nil if time == 0
+    time = false if time == 0
     time
   end
 
@@ -45,8 +45,8 @@ module OLED_SAVER
     while true do
       x, y = `xdotool getmouselocation --shell`[/X=(\d+)\nY=(\d+)/].lines.map do |v| v[/.=(\d+)/, 1].to_i end
       if xp == x and yp == y
-        `xrandr --output #{SCREEN} --brightness 0.0`
-        @dimmed = true
+        (`xrandr --output #{SCREEN} --brightness 0.0`
+         @dimmed = true) if @dimmed == false
       else
         (@dimmed = false; `xrandr --output #{SCREEN} --brightness 1.0`) if @dimmed == true
         xp, yp = x, y
